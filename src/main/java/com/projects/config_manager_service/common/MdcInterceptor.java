@@ -5,16 +5,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.UUID;
 
-import static com.projects.config_manager_service.common.constants.TRACE_ID_HEADER;
-import static com.projects.config_manager_service.common.constants.USER_UUID_HEADER;
-import static com.projects.config_manager_service.common.constants.TRACE_ID_MDC_KEY;
-import static com.projects.config_manager_service.common.constants.USER_UUID_MDC_KEY;
-import static com.projects.config_manager_service.common.constants.ANONYMOUS;
+import static com.projects.config_manager_service.common.Constants.TRACE_ID_HEADER;
+import static com.projects.config_manager_service.common.Constants.USER_UUID_HEADER;
+import static com.projects.config_manager_service.common.Constants.TRACE_ID_MDC_KEY;
+import static com.projects.config_manager_service.common.Constants.USER_UUID_MDC_KEY;
+import static com.projects.config_manager_service.common.Constants.ANONYMOUS;
+import static com.projects.config_manager_service.common.Constants.UUID_PATTERN;
+import static com.projects.config_manager_service.common.Constants.USER_UUID_PATTERN;
 
 @Slf4j
 @Component
@@ -29,15 +32,20 @@ public class MdcInterceptor implements HandlerInterceptor {
         String traceId  = request.getHeader(TRACE_ID_HEADER);
         String userUuid = request.getHeader(USER_UUID_HEADER);
 
+        log.info("[MdcInterceptor.preHandle] Recieved {}: {} and {}: {}", TRACE_ID_HEADER, traceId, USER_UUID_HEADER, userUuid);
+
+        boolean isTraceIdValid = !ObjectUtils.isEmpty(traceId) && UUID_PATTERN.matcher(traceId).matches();
+        boolean isUserUuidValid = !ObjectUtils.isEmpty(userUuid) && USER_UUID_PATTERN.matcher(userUuid).matches();
+
         // Auto-generate trace-id if caller didn't send one
-        if (!StringUtils.hasText(traceId)) {
+        if (!StringUtils.hasText(traceId) || !isTraceIdValid) {
             traceId = UUID.randomUUID().toString();
-            log.debug("No X-Trace-Id received, generated: {}", traceId);
+            log.debug("[MdcInterceptor.preHandle] Missing or invalid {}, generated: {}", TRACE_ID_HEADER, traceId);
         }
 
         MDC.put(TRACE_ID_MDC_KEY, traceId);
 
-        if (StringUtils.hasText(userUuid)) {
+        if (StringUtils.hasText(userUuid) && isUserUuidValid) {
             MDC.put(USER_UUID_MDC_KEY, userUuid);
         } else {
             MDC.put(USER_UUID_MDC_KEY, ANONYMOUS);

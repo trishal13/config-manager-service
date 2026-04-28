@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ApiResponse<Object>> handleServiceException(ServiceException ex) {
-        log.warn("Service exception occurred: {}", ex.getMessage());
+        log.warn("[GlobalExceptionHandler.handleServiceException] Service exception occurred: {}", ex.getMessage());
 
         ErrorCode code = ex.getErrorCode();
 
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
-        log.error("Unhandled exception", ex);
+        log.error("[GlobalExceptionHandler.handleGenericException] Unhandled exception", ex);
 
         ErrorCode code = ErrorCode.INTERNAL_ERROR;
 

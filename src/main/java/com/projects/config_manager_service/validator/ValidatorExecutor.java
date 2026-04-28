@@ -15,7 +15,7 @@ public class ValidatorExecutor {
     // Stops at first failure
     public void executeFailFast(List<Validator> validators, ValidationContext context) {
         for (Validator validator : validators) {
-            log.debug("Running validator: {}", validator.getClass().getSimpleName());
+            log.debug("[ValidatorExecutor.executeFailFast] Running validator: {}", validator.getClass().getSimpleName());
             validator.validate(context); // throws ServiceException on failure
         }
     }
@@ -25,19 +25,19 @@ public class ValidatorExecutor {
         List<String> errors = new ArrayList<>();
 
         for (Validator validator : validators) {
-            log.debug("Running validator: {}", validator.getClass().getSimpleName());
+            log.debug("[ValidatorExecutor.executeAll] Running validator: {}", validator.getClass().getSimpleName());
             try {
                 validator.validate(context);
             } catch (ServiceException ex) {
                 errors.add(ex.getMessage());
             } catch (Exception ex) {
-                log.error("Unexpected error in validator: {}", validator.getClass().getSimpleName(), ex);
+                log.error("[ValidatorExecutor.executeAll] Unexpected error in validator: {}", validator.getClass().getSimpleName(), ex);
                 errors.add("Unexpected validation error in " + validator.getClass().getSimpleName());
             }
         }
 
         if (!errors.isEmpty()) {
-            log.warn("Validation failed with errors: {}", errors);
+            log.warn("[ValidatorExecutor.executeAll] Validation failed with errors: {}", errors);
             throw new ServiceException(ErrorCode.VALIDATION_ERROR, String.join(", ", errors));
         }
     }
