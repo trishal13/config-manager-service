@@ -1,0 +1,20 @@
+package com.projects.config_manager_service.config;
+
+import com.projects.config_manager_service.common.MdcInterceptor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+@RequiredArgsConstructor
+public class WebMvcConfig implements WebMvcConfigurer {
+
+    private final MdcInterceptor mdcInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(mdcInterceptor)
+                .addPathPatterns("/**");       // applies to every endpoint
+    }
+}
