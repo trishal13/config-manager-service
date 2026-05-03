@@ -1,5 +1,6 @@
 package com.projects.config_manager_service.entity;
 
+import com.projects.config_manager_service.enums.ConfigType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +32,7 @@ public class ConfigManager {
     private String configIdentifier;
 
     @Field("config_type")
-    private String configType;
+    private ConfigType configType;
 
     @Field("config_data")
     private Map<String, Object> configData;
