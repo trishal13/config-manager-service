@@ -1,5 +1,6 @@
 package com.projects.config_manager_service.dto;
 
+import com.projects.config_manager_service.enums.ConfigType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class ConfigResponseDTO {
 
     private String configIdentifier;
-    private String configType;
+    private ConfigType configType;
     private Map<String, Object> configData;
     private Instant createdAt;
     private String createdBy;

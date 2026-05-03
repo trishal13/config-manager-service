@@ -28,7 +28,7 @@ public class ConfigManagerServiceImpl implements ConfigManagerService {
                 configIdentifier, configType);
 
         return configManagerRepository
-                .findByConfigIdentifierAndConfigType(configIdentifier, configType.name())
+                .findByConfigIdentifierAndConfigType(configIdentifier, configType)
                 .orElseThrow(() -> new ServiceException(
                         ErrorCode.CONFIG_NOT_FOUND,
                         "Config not found for identifier=" + configIdentifier + " and type=" + configType
