@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    VALIDATION_ERROR("ERR_9000", "Invalid Request", HttpStatus.BAD_REQUEST),
-    INTERNAL_ERROR("ERR_9001", "Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+    INVALID_REQUEST("INVALID_REQUEST", "The request contains invalid or missing fields", HttpStatus.BAD_REQUEST),
+    CONFIG_NOT_FOUND("CONFIG_NOT_FOUND", "No config found for the given identifier and type", HttpStatus.NOT_FOUND),
+    INTERNAL_SERVER_ERROR("INTERNAL_SERVER_ERROR", "An unexpected error occurred, please try again later", HttpStatus.INTERNAL_SERVER_ERROR),
+    VALIDATION_ERROR("VALIDATION_ERROR", "Bad Request", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;

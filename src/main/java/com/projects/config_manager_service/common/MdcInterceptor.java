@@ -28,16 +28,15 @@ public class MdcInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) {
 
-        // Pull ONLY the two allowed headers — all others are intentionally ignored
         String traceId  = request.getHeader(TRACE_ID_HEADER);
         String userUuid = request.getHeader(USER_UUID_HEADER);
 
-        log.info("[MdcInterceptor.preHandle] Recieved {}: {} and {}: {}", TRACE_ID_HEADER, traceId, USER_UUID_HEADER, userUuid);
+        // Moved to DEBUG to avoid leaking user identifiers in production logs
+        log.debug("[MdcInterceptor.preHandle] Received {}: {} and {}: {}", TRACE_ID_HEADER, traceId, USER_UUID_HEADER, userUuid);
 
-        boolean isTraceIdValid = !ObjectUtils.isEmpty(traceId) && UUID_PATTERN.matcher(traceId).matches();
-        boolean isUserUuidValid = !ObjectUtils.isEmpty(userUuid) && USER_UUID_PATTERN.matcher(userUuid).matches();
+        boolean isTraceIdValid   = !ObjectUtils.isEmpty(traceId)  && UUID_PATTERN.matcher(traceId).matches();
+        boolean isUserUuidValid  = !ObjectUtils.isEmpty(userUuid) && USER_UUID_PATTERN.matcher(userUuid).matches();
 
-        // Auto-generate trace-id if caller didn't send one
         if (!StringUtils.hasText(traceId) || !isTraceIdValid) {
             traceId = UUID.randomUUID().toString();
             log.debug("[MdcInterceptor.preHandle] Missing or invalid {}, generated: {}", TRACE_ID_HEADER, traceId);
@@ -51,7 +50,6 @@ public class MdcInterceptor implements HandlerInterceptor {
             MDC.put(USER_UUID_MDC_KEY, ANONYMOUS);
         }
 
-        // Echo trace-id back so caller can correlate
         response.setHeader(TRACE_ID_HEADER, traceId);
 
         return true;
