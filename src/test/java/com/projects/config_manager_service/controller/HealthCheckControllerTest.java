@@ -4,7 +4,6 @@ import com.projects.config_manager_service.common.ApiResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,8 +14,8 @@ class HealthCheckControllerTest {
     private final HealthCheckController controller = new HealthCheckController();
 
     @Test
-    void health_shouldReturnOkWithHealthyPayload() throws Exception {
-        ResponseEntity<ApiResponse<List<Map<String, String>>>> response = controller.health();
+    void health_shouldReturnOkWithHealthyPayload() {
+        ResponseEntity<ApiResponse<Map<String, String>>> response = controller.health();
 
         assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());

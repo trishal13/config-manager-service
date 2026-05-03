@@ -1,6 +1,6 @@
 package com.projects.config_manager_service.validator;
 
-import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,13 +9,17 @@ public class ValidationContext {
 
     private final Map<Class<?>, Object> store = new HashMap<>();
 
-    // Store any object — key is its class type
-    public <T> ValidationContext put(Class<T> type, T value) {
-        store.put(type, value);
-        return this; // fluent chaining
+    private ValidationContext() {}
+
+    public static ValidationContext create() {
+        return new ValidationContext();
     }
 
-    // Retrieve — fully typed, no casting needed by caller
+    public <T> ValidationContext put(Class<T> type, T value) {
+        store.put(type, value);
+        return this;
+    }
+
     public <T> T get(Class<T> type) {
         Object value = store.get(type);
         if (ObjectUtils.isEmpty(value)) {
@@ -26,7 +30,10 @@ public class ValidationContext {
         return type.cast(value);
     }
 
-    // Check before getting — use in validators that have optional data
+    public <T> T getOptional(Class<T> type) {
+        return type.cast(store.get(type));
+    }
+
     public <T> boolean contains(Class<T> type) {
         return store.containsKey(type);
     }

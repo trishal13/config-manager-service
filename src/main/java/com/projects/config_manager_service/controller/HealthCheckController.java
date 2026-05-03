@@ -16,13 +16,13 @@ import java.util.Map;
 public class HealthCheckController {
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Map<String, String>>>> health() {
+    public ResponseEntity<ApiResponse<Map<String, String>>> health() {
         log.info("[HealthCheckController.health] Running health check controller!");
-        ApiResponse<List<Map<String, String>>> response = ApiResponse.<List<Map<String, String>>>builder()
-                .success(true)
-                .message("Service is healthy")
-                .data(List.of(Map.of("status", "UP")))
-                .build();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                    Map.of("status", "UP"),
+                    "Service is healthy"
+                )
+        );
     }
 }

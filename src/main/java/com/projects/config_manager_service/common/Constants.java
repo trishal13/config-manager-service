@@ -17,4 +17,12 @@ public class Constants {
             "^user:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
     );
 
+    public static final String CONFIG_IDENTIFIER = "config_identifier";
+    public static final String CONFIG_TYPE = "config_type";
+    public static final String CONFIG_DATA = "config_data";
+    public static final String CREATED_BY = "created_by";
+    public static final String CREATED_AT = "created_at";
+    public static final String UPDATED_BY = "updated_by";
+    public static final String UPDATED_AT = "updated_at";
+
 }

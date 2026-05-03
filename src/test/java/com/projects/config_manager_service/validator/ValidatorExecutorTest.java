@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ValidatorExecutorTest {
 
     private final ValidatorExecutor executor = new ValidatorExecutor();
-    private final ValidationContext context = new ValidationContext();
+    private final ValidationContext context = ValidationContext.create();
 
     @Test
     void executeFailFast_whenAllValidatorsPass_shouldNotThrow() {
